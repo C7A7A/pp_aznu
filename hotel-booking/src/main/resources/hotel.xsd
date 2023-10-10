@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.bp.org" 
+	xmlns:tns="http://www.bp.org" 
+	elementFormDefault="qualified"
+	xmlns:bpt="http://www.bp.org/types">
+	 <import schemaLocation="bpTypes.xsd" namespace="http://www.bp.org/types"/>
+  <element name="bookRoomRequest">
+    <complexType>
+      <sequence>
+        <element name="person" type="bpt:Person"/>
+        <element name="hotel" type="bpt:Hotel"/>
+      </sequence>
+    </complexType>
+  </element>
+  <element name="bookRoomResponse" type="bpt:BookingInfo"/>
+  <element name="hotelFault" type="bpt:Fault"/>
+  <element name="cancelBookingRequest">
+  	<complexType>
+  		<attribute name="bookingId" type="int"/>
+  	</complexType>
+  </element>
+  <element name="cancelBookingResponse" type="bpt:BookingInfo"/>
+
+</schema>
