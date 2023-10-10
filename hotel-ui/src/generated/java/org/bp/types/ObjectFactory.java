@@ -30,30 +30,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Flight }
-     * 
-     */
-    public Flight createFlight() {
-        return new Flight();
-    }
-
-    /**
-     * Create an instance of {@link Point }
-     * 
-     */
-    public Point createPoint() {
-        return new Point();
-    }
-
-    /**
-     * Create an instance of {@link PaymentCard }
-     * 
-     */
-    public PaymentCard createPaymentCard() {
-        return new PaymentCard();
-    }
-
-    /**
      * Create an instance of {@link Person }
      * 
      */
@@ -83,6 +59,30 @@ public class ObjectFactory {
      */
     public Fault createFault() {
         return new Fault();
+    }
+
+    /**
+     * Create an instance of {@link PaymentCard }
+     * 
+     */
+    public PaymentCard createPaymentCard() {
+        return new PaymentCard();
+    }
+
+    /**
+     * Create an instance of {@link Flight }
+     * 
+     */
+    public Flight createFlight() {
+        return new Flight();
+    }
+
+    /**
+     * Create an instance of {@link Point }
+     * 
+     */
+    public Point createPoint() {
+        return new Point();
     }
 
 }

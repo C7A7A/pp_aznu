@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head> 
+    <title>Fault</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Fault</h1>
+	<p th:text="'code: ' + ${hotelFaultMsg.faultInfo.code}" />
+    <p th:text="'text: ' + ${hotelFaultMsg.faultInfo.text}" />
+    <a href="/bookRoom">Try again</a>
+</body>
+</html>

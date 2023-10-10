@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head> 
+    <title>Result of hotel booking</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Result</h1>
+    <p th:text="'id: ' + ${bookingInfo.id}" />
+    <p th:text="'cost: ' + ${bookingInfo.cost}" />
+    <p th:text="'checkIn: ' + ${bookingInfo.checkIn}" />
+    <p th:text="'checkOut: ' + ${bookingInfo.checkOut}" />
+    <a href="/bookRoom">Submit another booking</a>
+</body>
+</html>

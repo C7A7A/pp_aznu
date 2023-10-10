@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://hotel.bp.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns3="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://www.bp.org/hotel/" name="HotelBookingEndpointService" targetNamespace="http://hotel.bp.org/">
+  <wsdl:import location="http://localhost:8080/soap-api/service/hotel?wsdl=HotelBooking.wsdl" namespace="http://www.bp.org/hotel/">
+    </wsdl:import>
+  <wsdl:binding name="HotelBookingEndpointServiceSoapBinding" type="ns1:HotelBooking">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="bookRoom">
+      <soap:operation soapAction="http://www.bp.org/hotel/bookRoom" style="document"/>
+      <wsdl:input name="bookRoom">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="bookRoomResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="HotelFaultMsg">
+        <soap:fault name="HotelFaultMsg" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="cancelBooking">
+      <soap:operation soapAction="http://www.bp.org/hotel/cancelBooking" style="document"/>
+      <wsdl:input name="cancelBooking">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="cancelBookingResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="HotelFaultMsg">
+        <soap:fault name="HotelFaultMsg" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="HotelBookingEndpointService">
+    <wsdl:port binding="tns:HotelBookingEndpointServiceSoapBinding" name="HotelBookingEndpointPort">
+      <soap:address location="http://localhost:8080/soap-api/service/hotel"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
