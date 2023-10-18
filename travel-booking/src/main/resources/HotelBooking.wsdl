@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns2="http://www.bp.org" xmlns:ns1="http://www.bp.org/hotel/" name="HotelBooking" targetNamespace="http://www.bp.org/hotel/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.bp.org/types" elementFormDefault="qualified" targetNamespace="http://www.bp.org/types" version="1.0">
+
+  <xs:complexType name="Person">
+    <xs:sequence>
+      <xs:element name="firstName" type="xs:string"/>
+      <xs:element name="lastName" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Hotel">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="city" type="xs:string"/>
+      <xs:element name="country" type="xs:string"/>
+      <xs:element name="address" type="xs:string"/>
+      <xs:element name="checkIn" type="xs:dateTime"/>
+      <xs:element name="checkOut" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="BookingInfo">
+    <xs:sequence>
+      <xs:element name="id" type="xs:int"/>
+      <xs:element name="cost" type="xs:decimal"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Fault">
+    <xs:sequence>
+      <xs:element name="code" type="xs:int"/>
+      <xs:element name="text" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Point">
+    <xs:sequence>
+      <xs:element name="airport" type="xs:string"/>
+      <xs:element name="date" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="PaymentCard">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="validTo" type="xs:string"/>
+      <xs:element name="number" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Flight">
+    <xs:sequence>
+      <xs:element name="from" type="tns:Point"/>
+      <xs:element name="to" type="tns:Point"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://www.bp.org/types" elementFormDefault="qualified" targetNamespace="http://www.bp.org" version="1.0">
+
+  <xs:import namespace="http://www.bp.org/types"/>
+
+  <xs:element name="bookRoomRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="person" type="ns1:Person"/>
+        <xs:element name="hotel" type="ns1:Hotel"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="bookRoomResponse" type="ns1:BookingInfo"/>
+
+  <xs:element name="cancelBookingRequest">
+    <xs:complexType>
+      <xs:sequence/>
+      <xs:attribute name="bookingId" type="xs:int"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="cancelBookingResponse" type="ns1:BookingInfo"/>
+
+  <xs:element name="hotelFault" type="ns1:Fault"/>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="cancelBooking">
+    <wsdl:part element="ns2:cancelBookingRequest" name="payload">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="HotelFaultMsg">
+    <wsdl:part element="ns2:hotelFault" name="HotelFaultMsg">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="bookRoomResponse">
+    <wsdl:part element="ns2:bookRoomResponse" name="payload">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="bookRoom">
+    <wsdl:part element="ns2:bookRoomRequest" name="payload">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelBookingResponse">
+    <wsdl:part element="ns2:cancelBookingResponse" name="payload">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="HotelBooking">
+    <wsdl:operation name="bookRoom">
+      <wsdl:input message="ns1:bookRoom" name="bookRoom">
+    </wsdl:input>
+      <wsdl:output message="ns1:bookRoomResponse" name="bookRoomResponse">
+    </wsdl:output>
+      <wsdl:fault message="ns1:HotelFaultMsg" name="HotelFaultMsg">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="cancelBooking">
+      <wsdl:input message="ns1:cancelBooking" name="cancelBooking">
+    </wsdl:input>
+      <wsdl:output message="ns1:cancelBookingResponse" name="cancelBookingResponse">
+    </wsdl:output>
+      <wsdl:fault message="ns1:HotelFaultMsg" name="HotelFaultMsg">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

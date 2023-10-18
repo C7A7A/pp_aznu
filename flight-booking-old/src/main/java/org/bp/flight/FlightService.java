@@ -2,13 +2,16 @@ package org.bp.flight;
 
 
 
+import javax.jws.WebService;
+
 import org.bp.types.BookingInfo;
 import org.bp.types.Fault;
 import org.bp.types.Flight;
 import org.bp.types.FlightTicket;
+import org.springframework.stereotype.Service;
 
-@javax.jws.WebService
-@org.springframework.stereotype.Service
+@WebService
+@Service
 public class FlightService {
 	
 	public BookingInfo bookFligth(FlightTicket fligthTicket) throws Fault{
@@ -30,7 +33,7 @@ public class FlightService {
 		
 	}
 	
-	public BookingInfo cancelBooking(int bookingId) throws Fault{
+	public BookingInfo cancelBooking(int bookingId)  throws Fault {
 		return null;
 	}
 
