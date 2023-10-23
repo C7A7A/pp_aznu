@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.7.16</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>org.bp</groupId>
+	<artifactId>micro-travel-booking</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>micro-travel-booking</name>
+	<description>Booking of travel using microservices</description>
+	<properties>
+		<java.version>1.8</java.version>
+		<camel.version>3.6.0</camel.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel.springboot</groupId>
+			<artifactId>camel-spring-boot-starter</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel.springboot</groupId>
+			<artifactId>camel-swagger-java-starter</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel.springboot</groupId>
+			<artifactId>camel-servlet-starter</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel.springboot</groupId>
+			<artifactId>camel-jackson-starter</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel.springboot</groupId>
+			<artifactId>camel-stream-starter</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>swagger-ui</artifactId>
+			<version>3.36.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>webjars-locator</artifactId>
+			<version>0.40</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel.springboot</groupId>
+			<artifactId>camel-kafka-starter</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>io.swagger.codegen.v3</groupId>
+				<artifactId>swagger-codegen-maven-plugin</artifactId>
+				<version>3.0.31</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.github.jknack</groupId>
+						<artifactId>handlebars</artifactId>
+						<version>4.3.0</version>
+					</dependency>
+				</dependencies>
+
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>
+								${project.basedir}/src/main/resources/travel-booking.yaml</inputSpec>
+							<language>java</language>
+							<library>resttemplate</library>
+							<modelPackage>org.bp.travel.model</modelPackage>
+							<generateApis>false</generateApis>
+							<generateSupportingFiles>false</generateSupportingFiles>
+							<generateModelDocumentation>false</generateModelDocumentation>
+							<skip>true</skip>
+							<configOptions>
+								<java8>true</java8>
+								<dateLibrary>java8</dateLibrary>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

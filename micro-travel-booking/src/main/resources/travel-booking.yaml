@@ -1,0 +1,128 @@
+openapi: 3.0.1
+info:
+  title: Travel mircro service
+  description: Micro service to book a travel
+  contact:
+    email: supportm@bp.org
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: http://localhost:8090
+tags:
+- name: travel
+  description: Travel which you can book
+paths:
+  /travel:
+    post:
+      tags:
+      - travel
+      summary: Booking of a travel
+      operationId: bookTravel
+      requestBody:
+        description: Details of travel which you are booking
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookTravelRequest'
+        required: true
+      responses:
+        400:
+          description: Problem during processing of the booking
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+
+components:
+  schemas:
+    Person:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+    Hotel:
+      type: object
+      properties:
+        name:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        address:
+          type: string
+        checkIn:
+          type: string
+          format: date-time
+        checkOut:
+          type: string
+          format: date-time
+    BookingInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        cost:
+          type: number
+    Point:
+      type: object
+      properties:
+        airport:
+          type: string
+        date:
+          type: string
+          format: date-time
+    Flight:
+      type: object
+      properties:
+        from:
+          $ref: '#/components/schemas/Point' 
+        to:
+          $ref: '#/components/schemas/Point' 
+    PaymentCard:
+      type: object
+      properties:
+        name:
+          type: string
+        validTo:
+          type: string
+        number:
+          type: string
+    BookRoomRequest:
+      type: object
+      properties:
+        person:
+          $ref: '#/components/schemas/Person'
+        hotel:
+          $ref: '#/components/schemas/Hotel'
+    BookFlightRequest:
+      type: object
+      properties:
+        person:
+          $ref: '#/components/schemas/Person'
+        flight:
+          $ref: '#/components/schemas/Flight'
+    BookTravelRequest:
+      type: object
+      properties:
+        person:
+          $ref: '#/components/schemas/Person'
+        hotel:
+          $ref: '#/components/schemas/Hotel'
+        flight:
+          $ref: '#/components/schemas/Flight'
+        paymentCard:
+          $ref: '#/components/schemas/PaymentCard'
+    ExceptionResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        message:
+          type: string
+
