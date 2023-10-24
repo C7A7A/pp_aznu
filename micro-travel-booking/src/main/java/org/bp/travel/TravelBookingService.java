@@ -19,9 +19,16 @@ import org.bp.travel.model.ExceptionResponse;
 import org.bp.travel.state.ProcessingEvent;
 import org.bp.travel.state.ProcessingState;
 import org.bp.travel.state.StateService;
+import org.springframework.beans.factory.annotation.Value;
 
 @Component
 public class TravelBookingService extends RouteBuilder {
+	
+	@Value("${travel.kafka.server}")
+	private String travelKafkaServer;
+	
+	@Value("${travel.service.type}")
+	private String travelServiceType;
 	
 	@Autowired
 	BookingIdentifierService bookingIdentifierService;
@@ -37,16 +44,22 @@ public class TravelBookingService extends RouteBuilder {
 
 	@Override
 	public void configure() throws Exception {
-		bookHotelExceptionHandlers();
-		bookFlightExceptionHandlers();
-		gateway();
-		hotel();
-		flight();
-		payment();
+		if (travelServiceType.equals("all") || travelServiceType.equals("hotel"))
+			bookHotelExceptionHandlers();
+		if (travelServiceType.equals("all") || travelServiceType.equals("flight"))
+			bookFlightExceptionHandlers();
+		if (travelServiceType.equals("all") || travelServiceType.equals("gateway"))
+			gateway();
+		if (travelServiceType.equals("all") || travelServiceType.equals("hotel"))
+			hotel();
+		if (travelServiceType.equals("all") || travelServiceType.equals("flight"))
+			flight();
+		if (travelServiceType.equals("all") || travelServiceType.equals("payment"))
+			payment();
 	}
 	
 	private void payment() {
-		from("kafka:BookingInfoTopic?brokers=localhost:9092").routeId("paymentBookingInfo")
+		from("kafka:BookingInfoTopic?brokers=" + travelKafkaServer + "&groupId=" + travelServiceType).routeId("paymentBookingInfo")
 			.log("fired paymentBookingInfo")
 			.unmarshal().json(JsonLibrary.Jackson, BookingInfo.class)
 			.process((exchange) -> {
@@ -62,7 +75,7 @@ public class TravelBookingService extends RouteBuilder {
 			.when(header("isReady").isEqualTo(true)).to("direct:finalizePayment")
 			.endChoice();
 		
-		from("kafka:TravelReqTopic?brokers=localhost:9092").routeId("paymentTravelReq")
+		from("kafka:TravelReqTopic?brokers=" + travelKafkaServer + "&groupId=" + travelServiceType).routeId("paymentTravelReq")
 			.log("fired paymentTravelReq")
 			.unmarshal().json(JsonLibrary.Jackson, BookTravelRequest.class)
 			.process((exchange) -> {
@@ -101,7 +114,7 @@ public class TravelBookingService extends RouteBuilder {
 	}
 	
 	private void flight() {
-		from("kafka:TravelReqTopic?brokers=localhost:9092").routeId("bookFlight")
+		from("kafka:TravelReqTopic?brokers=" + travelKafkaServer + "&groupId=" + travelServiceType).routeId("bookFlight")
 			.log("fired bookFlight")
 			.unmarshal().json(JsonLibrary.Jackson, BookTravelRequest.class)
 			.process((exchange) -> {
@@ -139,10 +152,10 @@ public class TravelBookingService extends RouteBuilder {
 			.to("direct:bookFlightCompensationAction")
 			.otherwise()
 				.setHeader("serviceType", constant("flight"))
-				.to("kafka:BookingInfoTopic?brokers=localhost:9092")
+				.to("kafka:BookingInfoTopic?brokers=" + travelKafkaServer + "&groupId=" + travelServiceType)
 			.endChoice();
 		
-		from("kafka:TravelBookingFailTopic?brokers=localhost:9092").routeId("bookFlightCompensation")
+		from("kafka:TravelBookingFailTopic?brokers=" + travelKafkaServer + "&groupId=" + travelServiceType).routeId("bookFlightCompensation")
 			.log("fired bookFlightCompensation")
 			.unmarshal().json(JsonLibrary.Jackson, ExceptionResponse.class)
 			.choice()
@@ -164,7 +177,7 @@ public class TravelBookingService extends RouteBuilder {
 	}
 	
 	private void hotel() {
-		from("kafka:TravelReqTopic?brokers=localhost:9092").routeId("bookHotel")
+		from("kafka:TravelReqTopic?brokers=" + travelKafkaServer + "&groupId=" + travelServiceType).routeId("bookHotel")
 			.log("fired bookHotel")
 			.unmarshal().json(JsonLibrary.Jackson, BookTravelRequest.class)
 			.process((exchange) -> {
@@ -201,10 +214,10 @@ public class TravelBookingService extends RouteBuilder {
 				.to("direct:bookHotelCompensationAction")
 			.otherwise()
 				.setHeader("serviceType", constant("hotel"))
-				.to("kafka:BookingInfoTopic?brokers=localhost:9092")
+				.to("kafka:BookingInfoTopic?brokers=" + travelKafkaServer + "&groupId=" + travelServiceType)
 			.endChoice();
 		
-		from("kafka:TravelBookingFailTopic?brokers=localhost:9092").routeId("bookHotelCompensation")
+		from("kafka:TravelBookingFailTopic?brokers=" + travelKafkaServer + "&groupId=" + travelServiceType).routeId("bookHotelCompensation")
 			.log("fired bookHotelCompensation")
 			.unmarshal().json(JsonLibrary.Jackson, ExceptionResponse.class)
 			.choice()
@@ -270,7 +283,7 @@ public class TravelBookingService extends RouteBuilder {
 			.routeId("TravelBookRequest")
 			.log("brokerTopic fired")
 			.marshal().json()
-			.to("kafka:TravelReqTopic?brokers=localhost:9092");
+			.to("kafka:TravelReqTopic?brokers=" + travelKafkaServer + "&groupId=" + travelServiceType);
 	}
 	
 	private void bookFlightExceptionHandlers() {
@@ -285,7 +298,7 @@ public class TravelBookingService extends RouteBuilder {
 	    .marshal().json()
 		.to("stream:out")
 		.setHeader("serviceType", constant("flight"))
-		.to("kafka:TravelBookingFailTopic?brokers=localhost:9092")
+		.to("kafka:TravelBookingFailTopic?brokers=" + travelKafkaServer + "&groupId=" + travelServiceType)
 		.handled(true);	
 	}
 	
@@ -301,7 +314,7 @@ public class TravelBookingService extends RouteBuilder {
         .marshal().json()
 		.to("stream:out")
 		.setHeader("serviceType", constant("hotel"))
-		.to("kafka:TravelBookingFailTopic?brokers=localhost:9092")
+		.to("kafka:TravelBookingFailTopic?brokers=" + travelKafkaServer + "&groupId=" + travelServiceType)
 		.handled(true);	
 	}	
 }
